@@ -94,7 +94,7 @@ async function sendTelegram(env, text) {
   }
 }
 
-// 手动重启单个账号时仍发送通知（保留原逻辑）
+// 手动重启单个账号时仍发送通知
 async function notifySingle(env, opts) {
   var time = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
   var text = '';
@@ -132,7 +132,6 @@ async function apiRequest(path, cookie, options) {
   var response = await fetch(url, fetchOpts);
   log('DEBUG', '响应: ' + response.status);
 
-  // ⭐ 提取set-cookie用于被动续期
   var newCookie = null;
   var setCookie = response.headers.get('set-cookie');
   if (setCookie) {
@@ -377,7 +376,7 @@ async function restartAccountServers(env, account, specificServerId) {
   return results;
 }
 
-// ========== 生成并发送汇总重启报告（新格式）==========
+// ========== 生成并发送汇总重启报告 ==========
 async function sendSummaryReport(env, allResults) {
   var report = '📊 重启报告\n\n';
 
@@ -431,7 +430,6 @@ async function restartAllAccounts(env) {
 
   log('INFO', '========== 批量重启完成 ==========');
 
-  // 发送唯一的汇总重启报告
   await sendSummaryReport(env, allResults);
 
   return {
